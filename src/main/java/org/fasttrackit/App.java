@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
  */
 public class App 
 {
-    public static void main( String[] args ) throws IOException, SQLException {
+    public static void main( String[] args ) throws IOException, SQLException, ClassNotFoundException {
 
         TaskRepository taskRepository = new TaskRepository();
 
