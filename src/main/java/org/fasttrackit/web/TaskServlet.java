@@ -52,6 +52,8 @@ public class TaskServlet extends HttpServlet {
     protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws SecurityException, IOException {
         CreateTaskRequest request = new ObjectMapperConfiguration().objectMapper.readValue(req.getReader(), CreateTaskRequest.class);
 
+        setAccessControlHeaders(resp);
+
         try {
             taskService.createTask(request);
         } catch (SQLException | ClassNotFoundException e) {
@@ -63,6 +65,8 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        setAccessControlHeaders(resp);
+
         try {
             List<Task> tasks = taskService.getTasks();
 
@@ -72,5 +76,21 @@ public class TaskServlet extends HttpServlet {
         } catch (SQLException | ClassNotFoundException e) {
             resp.sendError(500, "Internal server error: " + e.getMessage());
         }
+    }
+
+    // for pre-flight requests
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        setAccessControlHeaders(resp);
+
+    }
+
+    // CORS configuration (Cross-Origin-Resource-Sharing
+    private void setAccessControlHeaders(HttpServletResponse resp){
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        resp.setHeader("Access-Control-Allow-Headers", "content-type");
+
     }
 }
